@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ExampleMVVM</string>
+    <string name="toolbar_title">EXAMPLE MVVM</string>
+</resources>
