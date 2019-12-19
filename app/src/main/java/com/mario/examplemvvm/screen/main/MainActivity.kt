@@ -1,14 +1,13 @@
 package com.mario.examplemvvm.screen.main
 
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.mario.examplemvvm.R
-import com.mario.examplemvvm.screen.base.BaseActivity
 
-class MainActivity : BaseActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_layout)
-        routeToFragment(MainFragment.newInstance())
     }
 }

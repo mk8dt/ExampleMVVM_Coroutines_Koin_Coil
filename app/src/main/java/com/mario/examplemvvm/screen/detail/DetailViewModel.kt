@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mario.core.domain.data.UserData
 import com.mario.core.domain.fold
-import com.mario.examplemvvm.usecase.GetUserUseCase
-import com.mario.examplemvvm.viewmodel.BaseViewModel
+import com.mario.examplemvvm.screen.base.BaseViewModel
+import com.mario.examplemvvm.usecase.GetUserByNameUseCaseSuspend
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class DetailViewModel(
-    private val getUserUseCase: GetUserUseCase
+    private val getUserByNameUseCase: GetUserByNameUseCaseSuspend
 ) : BaseViewModel<DetailView>() {
 
     private val _userLiveData = MutableLiveData<UserData>()
@@ -25,7 +25,6 @@ class DetailViewModel(
         job = Job()
         uiScope = CoroutineScope(Dispatchers.Main + job)
         ioContext = Dispatchers.IO + job
-        getUserDetail()
     }
 
     override fun onDestroy() {
@@ -33,13 +32,12 @@ class DetailViewModel(
         ioContext.cancel()
     }
 
-    private fun getUserDetail() {
-
+    fun getUserDetail(userId: String) {
         uiScope.launch {
-            val result = uiScope.async { withContext(ioContext) { getUserUseCase.bind() } }
+            val result = uiScope.async { withContext(ioContext) { getUserByNameUseCase.execute(userId) } }
 
             result.await().fold(
-                { message -> print(message) },
+                { message -> view?.showErrorToast(message) },
                 { user -> _userLiveData.postValue(user) }
             )
         }

@@ -9,7 +9,7 @@ class GetUserListUseCase(
     private val serviceUser: ServiceUser
 ) : UseCaseSuspend<Either<String, List<UserData>>> {
 
-    override suspend fun bind(): Either<String, List<UserData>> {
+    override suspend fun execute(): Either<String, List<UserData>> {
         return serviceUser.getUserList()
     }
 }

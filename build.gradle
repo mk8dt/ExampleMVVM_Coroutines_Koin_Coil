@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -32,8 +33,7 @@ ext {
     retrofit_version = '2.6.1'
     okHttp_version = '4.1.0'
     coil_version = '0.6.1'
-    rxkotlin_version = '2.2.0'
-    rxbinding_version = '2.1.1'
+    nav_version = '2.1.0'
 }
 
 task clean(type: Delete) {

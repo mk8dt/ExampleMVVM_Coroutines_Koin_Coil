@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mario.core.domain.data.UserData
@@ -22,13 +24,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : BaseFragment(), MainView {
 
     private val mainViewModel: MainViewModel by viewModel()
-
-    companion object {
-        fun newInstance(): MainFragment = MainFragment()
-    }
+    private lateinit var navController: NavController
 
     private val userAdapter = UserAdapter(listOf()) { user ->
-        mainViewModel.goToDetail(user)
+        routeToDetail(user.id)
     }
 
     private val dataObserver = Observer<List<UserData>> { userList ->
@@ -41,6 +40,7 @@ class MainFragment : BaseFragment(), MainView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
         initView()
     }
 
@@ -55,6 +55,12 @@ class MainFragment : BaseFragment(), MainView {
         mainViewModel.userListLiveData.observe(this, dataObserver)
     }
 
+    private fun routeToDetail(userId: String) {
+        val action = MainFragmentDirections.routeToDetail()
+        action.userID = userId
+        navController.navigate(action)
+    }
+
     override fun hideLoading() {
         progressBar.gone()
     }
@@ -63,7 +69,7 @@ class MainFragment : BaseFragment(), MainView {
         progressBar.visible()
     }
 
-    override fun showToast(message: String) {
+    override fun showErrorToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 

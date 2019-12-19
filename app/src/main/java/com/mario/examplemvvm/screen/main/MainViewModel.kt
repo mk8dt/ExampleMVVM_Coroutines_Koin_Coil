@@ -4,17 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mario.core.domain.data.UserData
 import com.mario.core.domain.fold
-import com.mario.examplemvvm.screen.common.RouterController
+import com.mario.examplemvvm.screen.base.BaseViewModel
 import com.mario.examplemvvm.usecase.GetUserListUseCase
-import com.mario.examplemvvm.usecase.SaveUserIdUseCase
-import com.mario.examplemvvm.viewmodel.BaseViewModel
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
 class MainViewModel(
-    private val getUserListUseCase: GetUserListUseCase,
-    private val saveUserIdUseCase: SaveUserIdUseCase,
-    private val routerController: RouterController
+    private val getUserListUseCase: GetUserListUseCase
 ) : BaseViewModel<MainView>() {
 
     private val _userListLiveData = MutableLiveData<List<UserData>>()
@@ -42,19 +38,14 @@ class MainViewModel(
 
         uiScope.launch {
 
-            val result = uiScope.async { withContext(ioContext) { getUserListUseCase.bind() } }
+            val result = uiScope.async { withContext(ioContext) { getUserListUseCase.execute() } }
 
             view?.hideLoading()
 
             result.await().fold(
-                { message -> view?.showToast(message) },
+                { message -> view?.showErrorToast(message) },
                 { userList -> _userListLiveData.postValue(userList) }
             )
         }
-    }
-
-    fun goToDetail(user: UserData) {
-        saveUserIdUseCase.bind(user)
-        routerController.routeToDetailActivity()
     }
 }

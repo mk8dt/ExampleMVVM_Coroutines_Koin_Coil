@@ -6,13 +6,8 @@ import com.mario.core.domain.provider.ProviderUser
 
 class ServiceUser(private val providerUser: ProviderUser) {
 
-    private lateinit var userData: UserData
-
     suspend fun getUserList(): Either<String, List<UserData>> = providerUser.getUserList()
 
-    suspend fun getUserById(): Either<String, UserData?> = providerUser.getUserById(userData.id)
+    suspend fun getUserById(userId: String): Either<String, UserData?> = providerUser.getUserById(userId)
 
-    fun saveUser(user: UserData) {
-        userData = user
-    }
 }
