@@ -7,7 +7,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseViewModel<V : ViewModelView> : ViewModel() {
+abstract class BaseViewModel<V : BaseView> : ViewModel() {
 
     private lateinit var job: Job
     protected lateinit var uiScope: CoroutineScope

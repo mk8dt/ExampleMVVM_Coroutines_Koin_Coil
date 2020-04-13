@@ -1,8 +1,8 @@
 package com.mario.examplemvvm.screen.main
 
-import com.mario.examplemvvm.screen.base.ViewModelView
+import com.mario.examplemvvm.screen.base.BaseView
 
-interface MainView : ViewModelView {
+interface MainView : BaseView {
 
     fun showLoading()
 

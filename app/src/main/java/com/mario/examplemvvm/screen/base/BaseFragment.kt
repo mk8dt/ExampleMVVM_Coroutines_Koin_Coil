@@ -13,7 +13,7 @@ abstract class BaseFragment : Fragment() {
     private lateinit var currentViewModel: BaseViewModel<*>
     protected val navController: NavController? by lazy { activity?.findNavController(R.id.nav_host) }
 
-    fun <V : ViewModelView> init(viewModel: BaseViewModel<V>, view: V) {
+    fun <V : BaseView> init(viewModel: BaseViewModel<V>, view: V) {
         currentViewModel = ViewModelProviders.of(this)[viewModel::class.java]
         (currentViewModel as BaseViewModel<V>).init(view)
     }

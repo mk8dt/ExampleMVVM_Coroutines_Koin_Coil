@@ -1,9 +1,9 @@
 package com.mario.examplemvvm.screen.detail
 
 import com.mario.core.domain.data.UserData
-import com.mario.examplemvvm.screen.base.ViewModelView
+import com.mario.examplemvvm.screen.base.BaseView
 
-interface DetailView : ViewModelView {
+interface DetailView : BaseView {
 
     fun drawUser(user: UserData)
 }
