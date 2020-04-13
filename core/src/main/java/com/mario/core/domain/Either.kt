@@ -12,7 +12,7 @@ fun <V> either(action: () -> V): Either<Exception, V> =
         error(e)
     }
 
-private fun <V> value(value: V): Either<Nothing, V> = Either.Value(value)
+fun <V> value(value: V): Either<Nothing, V> = Either.Value(value)
 
 private fun <E> error(error: E): Either<E, Nothing> = Either.Error(error)
 

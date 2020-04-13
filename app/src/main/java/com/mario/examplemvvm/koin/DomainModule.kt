@@ -1,15 +1,19 @@
 package com.mario.examplemvvm.koin
 
+import com.mario.core.client.ApiClient
+import com.mario.core.domain.cache.UserCache
 import com.mario.core.domain.provider.ProviderUser
 import com.mario.core.domain.repository.RepositoryUser
-import com.mario.core.domain.service.ServiceUser
+import com.mario.examplemvvm.client.ApiClientImpl
 import org.koin.dsl.module
 
 val domainModule = module {
 
-    single { ServiceUser(get()) }
-
-    single { ProviderUser(get()) }
+    single { ProviderUser(get(),get()) }
 
     single { RepositoryUser(get()) }
+
+    single { UserCache() }
+
+    single<ApiClient> { ApiClientImpl(get()) }
 }
