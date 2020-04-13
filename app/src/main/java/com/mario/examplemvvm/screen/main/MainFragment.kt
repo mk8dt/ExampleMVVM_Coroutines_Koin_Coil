@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mario.core.domain.data.UserData
@@ -24,7 +22,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainFragment : BaseFragment(), MainView {
 
     private val mainViewModel: MainViewModel by viewModel()
-    private lateinit var navController: NavController
 
     private val userAdapter = UserAdapter(listOf()) { user ->
         routeToDetail(user.id)
@@ -34,17 +31,10 @@ class MainFragment : BaseFragment(), MainView {
         userAdapter.setUserList(userList)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflateLayout(R.layout.main_layout)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        container?.inflateLayout(R.layout.main_layout)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-        initView()
-    }
-
-    private fun initView() {
+    override fun initView() {
         init(mainViewModel, this)
 
         recycler.run {
@@ -52,13 +42,13 @@ class MainFragment : BaseFragment(), MainView {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
         }
-        mainViewModel.userListLiveData.observe(this, dataObserver)
+        mainViewModel.userListLiveData.observe(viewLifecycleOwner, dataObserver)
     }
 
     private fun routeToDetail(userId: String) {
         val action = MainFragmentDirections.routeToDetail()
         action.userID = userId
-        navController.navigate(action)
+        navController?.navigate(action)
     }
 
     override fun hideLoading() {
@@ -88,14 +78,14 @@ class MainFragment : BaseFragment(), MainView {
 
         override fun onBindViewHolder(holder: Holder, position: Int) {
             holder.apply {
-                bindUser(list[position])
+                drawUser(list[position])
                 itemView.setOnClickListener { onclick(list[position]) }
             }
         }
 
         inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            fun bindUser(user: UserData) {
+            fun drawUser(user: UserData) {
                 itemView.apply {
                     nameUserItem.text = user.firstName
                     lastNameUserItem.text = user.lastName

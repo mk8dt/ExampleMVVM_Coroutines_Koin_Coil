@@ -17,26 +17,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class DetailFragment : BaseFragment(), DetailView {
 
     private val detailViewModel: DetailViewModel by viewModel()
+    private lateinit var userId: String
 
-    private val dataObserver = Observer<UserData> { user ->
+    private val userObserver = Observer<UserData> { user ->
         drawUser(user)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        userId = arguments?.let { DetailFragmentArgs.fromBundle(it).userID } ?: ""
         return container?.inflateLayout(R.layout.detail_layout)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-    }
-
-    private fun initView() {
+    override fun initView() {
         init(detailViewModel, this)
-        detailViewModel.userLiveData.observe(this, dataObserver)
+        detailViewModel.userLiveData.observe(viewLifecycleOwner, userObserver)
 
-        val userID = arguments?.let { DetailFragmentArgs.fromBundle(it).userID } ?: ""
-        detailViewModel.getUserDetail(userID)
+        detailViewModel.getUserDetail(userId)
     }
 
     override fun showErrorToast(message: String) {

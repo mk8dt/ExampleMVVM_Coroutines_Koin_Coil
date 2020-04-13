@@ -1,12 +1,12 @@
 package com.mario.examplemvvm.koin
 
-import com.mario.examplemvvm.usecase.GetUserListUseCase
 import com.mario.examplemvvm.usecase.GetUserByNameUseCaseSuspend
+import com.mario.examplemvvm.usecase.GetUserListUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
 
-    single { GetUserListUseCase(get()) }
+    factory { GetUserListUseCase(get()) }
 
-    single { GetUserByNameUseCaseSuspend(get()) }
+    factory { GetUserByNameUseCaseSuspend(get()) }
 }

@@ -1,20 +1,32 @@
 package com.mario.examplemvvm.screen.base
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import org.koin.core.KoinComponent
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.mario.examplemvvm.R
 
-open class BaseFragment : Fragment(), KoinComponent {
+abstract class BaseFragment : Fragment() {
 
-    private var currentViewModel: BaseViewModel<*>? = null
+    private lateinit var currentViewModel: BaseViewModel<*>
+    protected val navController: NavController? by lazy { activity?.findNavController(R.id.nav_host) }
 
     fun <V : ViewModelView> init(viewModel: BaseViewModel<V>, view: V) {
         currentViewModel = ViewModelProviders.of(this)[viewModel::class.java]
         (currentViewModel as BaseViewModel<V>).init(view)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    abstract fun initView()
+
     override fun onDestroy() {
         super.onDestroy()
-        currentViewModel?.onDestroy()
+        currentViewModel.onDestroy()
     }
 }
